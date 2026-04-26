@@ -494,6 +494,58 @@ const CSS = `
     border-color: rgba(167,139,250,0.45);
   }
 
+  /* ── Page load animations ── */
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .ip-shell { opacity: 0; animation: fadeSlideUp 0.55s cubic-bezier(0.22,1,0.36,1) forwards; }
+
+  .ip-card:nth-child(1) { animation: fadeSlideUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.05s both; }
+  .ip-card:nth-child(2) { animation: fadeSlideUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.18s both; }
+
+  /* inner elements stagger on load */
+  .ip-hero-top > * {
+    opacity: 0;
+    animation: fadeSlideUp 0.45s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+  .ip-hero-top > *:nth-child(1) { animation-delay: 0.15s; }
+  .ip-hero-top > *:nth-child(2) { animation-delay: 0.22s; }
+  .ip-hero-top > *:nth-child(3) { animation-delay: 0.28s; }
+  .ip-hero-top > *:nth-child(4) { animation-delay: 0.34s; }
+
+  .ip-action > * {
+    opacity: 0;
+    animation: fadeSlideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+  .ip-action > *:nth-child(1) { animation-delay: 0.38s; }
+  .ip-action > *:nth-child(2) { animation-delay: 0.44s; }
+  .ip-action > *:nth-child(3) { animation-delay: 0.50s; }
+
+  .ip-table-head {
+    opacity: 0;
+    animation: fadeSlideUp 0.4s cubic-bezier(0.22,1,0.36,1) 0.25s forwards;
+  }
+
+  /* ── New transaction row animation ── */
+  @keyframes txnSlideIn {
+    from { opacity: 0; transform: translateX(-18px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes txnGlow {
+    0%   { box-shadow: inset 0 0 0 1px transparent; }
+    30%  { box-shadow: inset 0 0 0 1px rgba(108,99,255,0.4), 0 0 12px rgba(108,99,255,0.15); }
+    100% { box-shadow: inset 0 0 0 1px transparent; }
+  }
+
+  .ip-txn-new {
+    animation:
+      txnSlideIn 0.38s cubic-bezier(0.22,1,0.36,1) both,
+      txnGlow    0.9s ease 0.1s both;
+  }
+
   /* balance animation */
   @keyframes flashGreen {
     0%   { color: var(--text); }
@@ -672,7 +724,8 @@ const App = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [animKey, setAnimKey] = useState(0);
   const [animClass, setAnimClass] = useState("");
-  const [undoSnapshot, setUndoSnapshot] = useState(null); // { balance, transactions }
+  const [undoSnapshot, setUndoSnapshot] = useState(null);
+  const [latestTxnId, setLatestTxnId] = useState(null);
   const amountInput = useRef();
   const navigate = useNavigate();
   const prevBalance = useRef(balance);
